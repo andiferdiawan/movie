@@ -141,9 +141,9 @@ jobs:
             echo "🧐 Sanity check: .env must already exist on the server (it is gitignored, never deployed)"
 
             if [ ! -f "$PROJECT_DIR/.env" ]; then
-              echo "❌ $PROJECT_DIR/.env is missing. Create it once manually on the server"
-              echo "   (DB_*, OMDB_API_KEY, APP_KEY, APP_URL, APP_ENV=production, APP_DEBUG=false)"
-              echo "   before this workflow can run migrations."
+              echo "❌ $PROJECT_DIR/.env is missing."
+              echo "   Copy .env.production.example to $PROJECT_DIR/.env, fill in DB_HOST/DB_USERNAME/DB_PASSWORD,"
+              echo "   run '$PHP_BIN artisan key:generate --force' once, then re-run this workflow."
               exit 1
             fi
 
