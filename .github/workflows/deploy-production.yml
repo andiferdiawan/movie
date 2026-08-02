@@ -126,13 +126,29 @@ jobs:
               --exclude="index.php" \
               $PROJECT_DIR/public/ $PUBLIC_DIR/
 
-            echo "🩹 Copy + patch index.php and .htaccess (PUBLIC_DIR is a separate folder from PROJECT_DIR)"
+            echo "🩹 Write index.php + .htaccess for PUBLIC_DIR (relative ../../movie path, same pattern as the affiliate project)"
 
             cp $PROJECT_DIR/public/.htaccess $PUBLIC_DIR/.htaccess
 
-            cp $PROJECT_DIR/public/index.php $PUBLIC_DIR/index.php
-            sed -i "s#__DIR__.'/../vendor/autoload.php'#'${PROJECT_DIR}/vendor/autoload.php'#" $PUBLIC_DIR/index.php
-            sed -i "s#__DIR__.'/../bootstrap/app.php'#'${PROJECT_DIR}/bootstrap/app.php'#" $PUBLIC_DIR/index.php
+            cat > $PUBLIC_DIR/index.php <<'INDEXPHP'
+            <?php
+
+            define('LARAVEL_START', microtime(true));
+
+            require __DIR__.'/../../movie/vendor/autoload.php';
+
+            $app = require_once __DIR__.'/../../movie/bootstrap/app.php';
+
+            $kernel = $app->make(Illuminate\Contracts\Http\Kernel::class);
+
+            $response = $kernel->handle(
+                $request = Illuminate\Http\Request::capture()
+            );
+
+            $response->send();
+
+            $kernel->terminate($request, $response);
+            INDEXPHP
 
             echo "🔑 Laravel Permissions"
 
