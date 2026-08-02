@@ -1,4 +1,4 @@
-# Movie App — Laravel 5.8 Technical Test
+# Movie App — Laravel 5.8
 
 A Laravel 5.8 application for searching movies via the [OMDb API](https://www.omdbapi.com/), viewing movie details, and managing a personal list of favorite movies. Built for the Web Developer Technical Test.
 
