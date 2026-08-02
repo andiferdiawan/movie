@@ -1,0 +1,159 @@
+name: 🚀 Deploy Laravel to VPS
+
+on:
+  push:
+    branches:
+      - production
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🔑 Deploy via SSH
+        uses: appleboy/ssh-action@v1.2.0
+
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+
+          script: |
+            set -e
+
+            PROJECT_DIR=/home/edutechvps/movie
+            PUBLIC_DIR=/home/edutechvps/public_html/movie.edutech.or.id
+
+            echo "🐘 Locate a PHP 7.3 binary (Laravel 5.8 is incompatible with the server's default PHP 8.3 CLI)"
+            PHP_BIN=""
+            for candidate in \
+              /opt/cpanel/ea-php73/root/usr/bin/php \
+              /usr/local/bin/php73 \
+              /usr/local/bin/ea-php73 \
+              /opt/alt/php73/usr/bin/php \
+              /usr/bin/php7.3
+            do
+              if [ -x "$candidate" ]; then
+                PHP_BIN="$candidate"
+                break
+              fi
+            done
+
+            if [ -z "$PHP_BIN" ] && command -v php7.3 >/dev/null 2>&1; then
+              PHP_BIN="$(command -v php7.3)"
+            fi
+
+            if [ -z "$PHP_BIN" ]; then
+              echo "❌ No PHP 7.3 binary found in the known cPanel/EasyApache locations."
+              echo "   Run 'ls /opt/cpanel | grep ea-php' on the server to find the real path"
+              echo "   and add it to the \$candidate list above."
+              exit 1
+            fi
+
+            echo "✅ Using PHP: $PHP_BIN"
+            $PHP_BIN -v
+
+            echo "📂 Create project directory"
+            mkdir -p $PROJECT_DIR
+
+            echo "📂 Go to project directory"
+            cd $PROJECT_DIR
+
+            echo "🔐 Fix Git Safe Directory"
+            git config --global --add safe.directory $PROJECT_DIR
+
+            echo "📥 Clone or Pull Repository (production branch)"
+
+            if [ ! -d ".git" ]; then
+              git clone --branch production --single-branch git@github.com:<your-github-username>/movie.git .
+            else
+              git fetch origin production
+              git checkout production
+              git reset --hard origin/production
+            fi
+
+            echo "🟢 Load NVM"
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
+            nvm use 20
+
+            echo "📦 Check Versions"
+            node -v
+            npm -v
+            $PHP_BIN -v
+
+            echo "📦 Install Composer Dependencies (forced onto PHP 7.3)"
+
+            if [ -x /opt/cpanel/composer/bin/composer ]; then
+              COMPOSER_PHAR=/opt/cpanel/composer/bin/composer
+            elif command -v composer >/dev/null 2>&1; then
+              COMPOSER_PHAR=$(command -v composer)
+            else
+              COMPOSER_PHAR=""
+            fi
+
+            if [ -n "$COMPOSER_PHAR" ]; then
+              $PHP_BIN $COMPOSER_PHAR install \
+                --no-dev \
+                --no-interaction \
+                --prefer-dist \
+                --optimize-autoloader
+            else
+              echo "⚠️ Composer not installed, skipping..."
+            fi
+
+            echo "📦 Install NPM Dependencies"
+
+            export NODE_OPTIONS="--max-old-space-size=2048"
+
+            if [ -f package-lock.json ]; then
+              npm ci
+            else
+              npm install
+            fi
+
+            echo "🏗 Build Assets (Laravel Mix → public/css + public/js)"
+            npm run production
+
+            echo "📁 Sync public/ into the web-served directory"
+
+            mkdir -p $PUBLIC_DIR
+
+            rsync -a --delete \
+              --exclude=".htaccess" \
+              --exclude="index.php" \
+              $PROJECT_DIR/public/ $PUBLIC_DIR/
+
+            echo "🩹 Copy + patch index.php and .htaccess (PUBLIC_DIR is a separate folder from PROJECT_DIR)"
+
+            cp $PROJECT_DIR/public/.htaccess $PUBLIC_DIR/.htaccess
+
+            cp $PROJECT_DIR/public/index.php $PUBLIC_DIR/index.php
+            sed -i "s#__DIR__.'/../vendor/autoload.php'#'${PROJECT_DIR}/vendor/autoload.php'#" $PUBLIC_DIR/index.php
+            sed -i "s#__DIR__.'/../bootstrap/app.php'#'${PROJECT_DIR}/bootstrap/app.php'#" $PUBLIC_DIR/index.php
+
+            echo "🔑 Laravel Permissions"
+
+            chmod -R 775 storage bootstrap/cache || true
+
+            echo "🧐 Sanity check: .env must already exist on the server (it is gitignored, never deployed)"
+
+            if [ ! -f "$PROJECT_DIR/.env" ]; then
+              echo "❌ $PROJECT_DIR/.env is missing. Create it once manually on the server"
+              echo "   (DB_*, OMDB_API_KEY, APP_KEY, APP_URL, APP_ENV=production, APP_DEBUG=false)"
+              echo "   before this workflow can run migrations."
+              exit 1
+            fi
+
+            echo "🗄 Run Migration"
+
+            if [ -f artisan ]; then
+              $PHP_BIN artisan migrate --force
+              $PHP_BIN artisan optimize:clear
+            else
+              echo "⚠️ Laravel artisan not found, skipping..."
+            fi
+
+            echo "✅ Deploy Finished"
