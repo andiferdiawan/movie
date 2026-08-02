@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="445" viewBox="0 0 300 445">
+  <rect width="300" height="445" fill="#202027"/>
+  <g fill="#4b4b57">
+    <path d="M120 170h60v20h20l-50 50-50-50h20z" transform="rotate(180 150 195)"/>
+    <rect x="95" y="150" width="110" height="90" rx="6" fill="none" stroke="#4b4b57" stroke-width="6"/>
+    <circle cx="150" cy="195" r="18" fill="none" stroke="#4b4b57" stroke-width="6"/>
+  </g>
+  <text x="150" y="270" font-family="Arial, sans-serif" font-size="16" fill="#4b4b57" text-anchor="middle">No Poster</text>
+</svg>

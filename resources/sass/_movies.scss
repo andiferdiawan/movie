@@ -1,0 +1,432 @@
+// -----------------------------------------------------------------------
+// Layout chrome
+// -----------------------------------------------------------------------
+
+body {
+    background-color: $dark-bg;
+}
+
+.app-navbar {
+    background-color: $app-navbar-bg;
+    border-bottom: 1px solid $dark-border;
+
+    .navbar-brand {
+        font-weight: 800;
+        font-style: italic;
+        letter-spacing: 0.01em;
+        color: #fff !important;
+        font-size: 1.4rem;
+    }
+}
+
+// Pill-style nav tabs (Movies / My Favorites), à la streaming-app tab bars.
+.nav-pills-custom {
+    .nav-item {
+        margin-right: 0.5rem;
+    }
+
+    .nav-link {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.4rem 1.15rem !important;
+        border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        color: rgba(255, 255, 255, 0.75) !important;
+        font-weight: 600;
+        font-size: 0.85rem;
+        transition: all 0.15s ease;
+
+        &:hover {
+            border-color: rgba(255, 255, 255, 0.4);
+            color: #fff !important;
+        }
+    }
+
+    .nav-item.active .nav-link {
+        background: #fff;
+        border-color: #fff;
+        color: #111 !important;
+    }
+}
+
+.locale-pill,
+.user-pill {
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 999px;
+    padding: 0.3rem 0.9rem !important;
+    color: rgba(255, 255, 255, 0.85) !important;
+    font-weight: 600;
+    font-size: 0.82rem;
+
+    &:hover {
+        border-color: rgba(255, 255, 255, 0.4);
+        color: #fff !important;
+    }
+}
+
+.user-avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.6rem;
+    height: 1.6rem;
+    border-radius: 50%;
+    background: $accent;
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.75rem;
+    margin-right: 0.4rem;
+}
+
+.app-footer {
+    background-color: $app-navbar-bg;
+    border-top: 1px solid $dark-border;
+    color: $text-muted-dark;
+
+    a {
+        color: rgba(255, 255, 255, 0.85);
+    }
+}
+
+// -----------------------------------------------------------------------
+// Hero banner (top search result, styled like a streaming-app showcase)
+// -----------------------------------------------------------------------
+
+.movies-hero {
+    position: relative;
+    border-radius: $app-card-radius;
+    overflow: hidden;
+    min-height: 280px;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: flex-end;
+    background-color: $dark-surface;
+}
+
+.movies-hero-bg {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center 15%;
+    filter: saturate(1.05);
+    transform: scale(1.02);
+}
+
+.movies-hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        90deg,
+        rgba(11, 11, 15, 0.97) 0%,
+        rgba(11, 11, 15, 0.75) 35%,
+        rgba(11, 11, 15, 0.25) 65%,
+        rgba(11, 11, 15, 0.05) 100%
+    ),
+    linear-gradient(0deg, rgba(11, 11, 15, 0.9) 0%, rgba(11, 11, 15, 0) 45%);
+}
+
+.movies-hero-content {
+    position: relative;
+    padding: 2rem;
+    max-width: 640px;
+}
+
+.movies-hero-badge {
+    display: inline-block;
+    background: $accent;
+    color: #fff;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+    margin-bottom: 0.75rem;
+}
+
+.movies-hero-title {
+    color: #fff;
+    font-weight: 800;
+    font-size: 1.9rem;
+    margin-bottom: 0.4rem;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
+}
+
+.movies-hero-meta {
+    color: rgba(255, 255, 255, 0.75);
+    margin-bottom: 1.25rem;
+}
+
+.movies-hero-actions {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.btn-hero {
+    font-weight: 700;
+    border-radius: 999px;
+    padding: 0.5rem 1.4rem;
+}
+
+.btn-hero-favorite {
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.3);
+    color: #fff;
+
+    &.active {
+        background: $accent;
+        border-color: $accent;
+    }
+}
+
+// -----------------------------------------------------------------------
+// Search form
+// -----------------------------------------------------------------------
+
+.search-form {
+    background: $dark-surface;
+    border: 1px solid $dark-border;
+    padding: 1rem 1.25rem;
+    border-radius: $app-card-radius;
+}
+
+.search-form label {
+    color: $text-muted-dark;
+}
+
+// -----------------------------------------------------------------------
+// Movie grid & cards
+// -----------------------------------------------------------------------
+
+.movie-grid {
+    margin-top: 0.5rem;
+}
+
+.movie-col {
+    margin-bottom: 1.5rem;
+}
+
+.movie-card {
+    position: relative;
+    background: $dark-surface;
+    border: 1px solid $dark-border;
+    border-radius: $app-card-radius;
+    overflow: hidden;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+    height: 100%;
+
+    &:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45);
+        border-color: rgba(255, 255, 255, 0.2);
+    }
+}
+
+.movie-poster-link {
+    display: block;
+    background: $dark-surface-alt;
+}
+
+.movie-poster {
+    display: block;
+    width: 100%;
+    aspect-ratio: 2 / 3;
+    object-fit: cover;
+    background: $dark-surface-alt;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.movie-poster.lazy-loaded,
+.movie-poster:not(.lazy) {
+    opacity: 1;
+}
+
+.movie-info {
+    padding: 0.75rem 0.9rem 0.9rem;
+}
+
+.movie-title {
+    font-size: 0.95rem;
+    margin-bottom: 0.15rem;
+    line-height: 1.3;
+
+    a {
+        color: $text-light;
+        text-decoration: none;
+
+        &:hover {
+            color: $accent;
+        }
+    }
+}
+
+.movie-meta {
+    font-size: 0.8rem;
+    color: $text-muted-dark;
+    margin-bottom: 0;
+}
+
+// -----------------------------------------------------------------------
+// Favorite buttons
+// -----------------------------------------------------------------------
+
+.btn-favorite {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    width: 2.1rem;
+    height: 2.1rem;
+    border: none;
+    border-radius: 50%;
+    background: rgba(11, 11, 15, 0.6);
+    backdrop-filter: blur(2px);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+    cursor: pointer;
+
+    &:disabled {
+        opacity: 0.6;
+        cursor: default;
+    }
+
+    &.active {
+        background: $app-favorite;
+    }
+}
+
+.btn-favorite-lg {
+    border: 1px solid $app-favorite;
+    background: transparent;
+    color: $app-favorite;
+    border-radius: 2rem;
+    padding: 0.4rem 1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-weight: 600;
+    cursor: pointer;
+
+    .icon-heart {
+        font-size: 1.1rem;
+    }
+
+    &:disabled {
+        opacity: 0.6;
+        cursor: default;
+    }
+
+    &.active {
+        background: $app-favorite;
+        color: #fff;
+    }
+}
+
+// -----------------------------------------------------------------------
+// Movie detail page
+// -----------------------------------------------------------------------
+
+.movie-detail {
+    background: $dark-surface;
+    border: 1px solid $dark-border;
+}
+
+.movie-detail-poster {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    min-height: 320px;
+}
+
+.movie-plot {
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.movie-meta-list {
+    dt {
+        font-weight: 700;
+        color: $text-muted-dark;
+        font-size: 0.78rem;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        margin-top: 0.75rem;
+    }
+
+    dd {
+        margin-bottom: 0;
+        color: rgba(255, 255, 255, 0.85);
+    }
+}
+
+.imdb-rating .badge {
+    font-size: 0.9rem;
+}
+
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: rgba(255, 255, 255, 0.85);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.85rem;
+    padding: 0.4rem 1rem 0.4rem 0.85rem;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 999px;
+    background: transparent;
+    transition: all 0.15s ease;
+
+    .back-icon {
+        line-height: 1;
+        transition: transform 0.15s ease;
+    }
+
+    &:hover,
+    &:focus {
+        color: #fff;
+        text-decoration: none;
+        border-color: rgba(255, 255, 255, 0.4);
+        background: rgba(255, 255, 255, 0.06);
+
+        .back-icon {
+            transform: translateX(-2px);
+        }
+    }
+}
+
+// -----------------------------------------------------------------------
+// Empty states
+// -----------------------------------------------------------------------
+
+.empty-state {
+    text-align: center;
+    padding: 4rem 1rem;
+    background: $dark-surface;
+    border: 1px solid $dark-border;
+    border-radius: $app-card-radius;
+}
+
+.empty-state-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    opacity: 0.8;
+}
+
+// -----------------------------------------------------------------------
+// Auth
+// -----------------------------------------------------------------------
+
+.auth-card {
+    border: 1px solid $dark-border;
+    background: $dark-surface;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+    border-radius: $app-card-radius;
+    padding: 0.5rem;
+}

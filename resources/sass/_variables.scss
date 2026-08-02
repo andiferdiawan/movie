@@ -1,0 +1,67 @@
+// -----------------------------------------------------------------------
+// Dark, streaming-service-style theme (Bootstrap variable overrides)
+// -----------------------------------------------------------------------
+
+$dark-bg: #0b0b0f;
+$dark-surface: #17171c;
+$dark-surface-alt: #202027;
+$dark-border: #2b2b33;
+$text-light: #f2f2f5;
+$text-muted-dark: #9a9aa6;
+$accent: #ff3b5c;
+
+// Typography
+$font-family-sans-serif: 'Nunito', sans-serif;
+$font-size-base: 0.9rem;
+$line-height-base: 1.6;
+
+// Bootstrap palette
+$blue: #3490dc;
+$indigo: #6574cd;
+$purple: #9561e2;
+$pink: #f66d9b;
+$red: #e3342f;
+$orange: #f6993f;
+$yellow: #ffed4a;
+$green: #38c172;
+$teal: #4dc0b5;
+$cyan: #6cb2eb;
+
+$primary: $accent;
+$secondary: #3a3a42;
+$warning: #f6b93b;
+
+$body-bg: $dark-bg;
+$body-color: $text-light;
+$link-color: $accent;
+
+$card-bg: $dark-surface;
+$card-border-color: $dark-border;
+$border-color: $dark-border;
+
+$input-bg: $dark-surface-alt;
+$input-border-color: $dark-border;
+$input-color: $text-light;
+$input-placeholder-color: #6b6b76;
+$input-focus-bg: $dark-surface-alt;
+$input-focus-border-color: $accent;
+$input-focus-color: $text-light;
+
+$dropdown-bg: $dark-surface;
+$dropdown-link-color: $text-light;
+$dropdown-link-hover-color: #fff;
+$dropdown-link-hover-bg: $dark-surface-alt;
+$dropdown-border-color: $dark-border;
+
+$component-active-bg: $accent;
+$component-active-color: #fff;
+
+$navbar-dark-color: rgba(255, 255, 255, 0.75);
+$navbar-dark-hover-color: #fff;
+$navbar-dark-active-color: #fff;
+
+// App-specific accents
+$app-navbar-bg: #0e0e12;
+$app-accent: $accent;
+$app-favorite: $accent;
+$app-card-radius: 0.6rem;
